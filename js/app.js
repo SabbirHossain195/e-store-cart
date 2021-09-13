@@ -22,12 +22,48 @@ const showProducts = (products) => {
       <h4>Rating: ${product.rating.rate}</h4>
       <h4>Total Rated: ${product.rating.count} person</h4>
       <h2>Price: $ ${product.price}</h2>
-      <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
-      <button id="details-btn" class="btn btn-danger">Details</button></div>
+      <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-secondary me-3">add to cart</button>
+      <button onclick="showDetails(${product.id})" id="details-btn" class="btn btn-dark" data-bs-toggle="modal ms-3"
+      data-bs-target="#exampleModal">Details</button>
+      </div>
       `;
     document.getElementById("all-products").appendChild(div);
   }
 };
+
+const showDetails = (id) => {
+  const url = `https://fakestoreapi.com/products/${id}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => showDetailsOfProduct(data));
+}
+
+const showDetailsOfProduct = (product) => {
+  document.getElementById("product-heading").innerText = '';
+  document.getElementById("each-product").innerText = '';
+  const div2 = document.createElement("div");
+  const div1 = document.createElement("h3");
+  div1.innerHTML = `
+    <div class="text-center">
+      <h3>${product.title}</h3>
+    </div>
+  `;
+  document.getElementById("product-heading").appendChild(div1);
+  div2.innerHTML = `
+    <div class="text-center">
+      <div>
+        <img class="product-image mx-auto d-block" src=${product.image}></img>
+      </div>
+      <p>Category: ${product.category}</p>
+      <h4>Rating: ${product.rating.rate}</h4>
+      <h4>Total Rated: ${product.rating.count} person</h4>
+      <h2>Price: $ ${product.price}</h2>
+      <p>${product.description}</p>
+    </div>
+  `;
+  document.getElementById("each-product").appendChild(div2);
+}
+
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
